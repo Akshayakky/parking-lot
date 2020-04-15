@@ -4,25 +4,32 @@ import java.util.Arrays;
 
 public class ParkingLotSystem {
     public int PARKING_LOT_SIZE = 100;
-    public Object[] carsInLot = new Object[100];
-    public int isFull = 0;
+    public Vehicle[] carsInLot = new Vehicle[100];
+    public boolean isFull = false;
+    public boolean isEmpty = true;
+    private Owner owner;
+    private ParkingAttendant parkingAttendant;
+
+    public ParkingLotSystem(Owner owner, ParkingAttendant parkingAttendant) {
+        this.owner = owner;
+        this.parkingAttendant = parkingAttendant;
+    }
 
     public boolean park(Object vehicle, int position) throws ParkingLotException {
         if (isFull())
             throw new ParkingLotException(ParkingLotException.ExceptionType.LOT_FULL, "Lot Limit Reached");
-        if (this.isParked(vehicle) == false) {
-            new ParkingAttendant().park(carsInLot, vehicle, position);
-            isFull();
+        if (!this.isParked(vehicle)) {
+            parkingAttendant.park(carsInLot, vehicle, position);
             return true;
         }
         throw new ParkingLotException(ParkingLotException.ExceptionType.IS_ALREADY_PARKED, "Is Already Parked");
     }
 
     public boolean unPark(Object vehicle) throws ParkingLotException {
-        if (Arrays.stream(carsInLot).filter(s -> s != null).count() == 0)
+        if (isEmpty())
             throw new ParkingLotException(ParkingLotException.ExceptionType.LOT_EMPTY, "Parking Lot Empty");
-        if (this.isParked(vehicle) == true) {
-            carsInLot[Arrays.asList(carsInLot).indexOf(vehicle)] = null;
+        if (this.isParked(vehicle)) {
+            parkingAttendant.unPark(carsInLot, vehicle);
             isFull();
             return true;
         }
@@ -36,11 +43,13 @@ public class ParkingLotSystem {
     }
 
     public boolean isFull() {
-        if (Arrays.stream(carsInLot).filter(s -> s != null).count() == PARKING_LOT_SIZE) {
-            isFull = 1;
-            return true;
-        } else isFull = 0;
-        return false;
+        isFull = owner.isFull(carsInLot);
+        return isFull;
+    }
+
+    public boolean isEmpty() {
+        isEmpty = owner.isEmpty(carsInLot);
+        return isEmpty;
     }
 
     public int getCarPosition(Object vehicle) {

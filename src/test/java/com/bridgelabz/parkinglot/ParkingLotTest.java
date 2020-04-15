@@ -14,7 +14,7 @@ public class ParkingLotTest {
     @Before
     public void setup() {
         vehicle = new Vehicle(new Date());
-        parkingLotSystem = new ParkingLotSystem();
+        parkingLotSystem = new ParkingLotSystem(new Owner(), new ParkingAttendant());
     }
 
     @Test
@@ -145,7 +145,7 @@ public class ParkingLotTest {
                 parkingLotSystem.park(new Vehicle(new Date()), count);
             parkingLotSystem.park(vehicle, 0);
             parkingLotSystem.unPark(vehicle);
-            Assert.assertEquals(0, parkingLotSystem.isFull);
+            Assert.assertFalse(parkingLotSystem.isFull);
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
@@ -174,6 +174,17 @@ public class ParkingLotTest {
 
     @Test
     public void givenParkingLot_WhenDriverEntersCar_ThenReturnPosition() {
+        try {
+            parkingLotSystem.park(vehicle, 45);
+            int position = parkingLotSystem.getCarPosition(vehicle);
+            Assert.assertEquals(45, position);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenParkingAttendant_ShouldDistributeEvenly() {
         try {
             parkingLotSystem.park(vehicle, 45);
             int position = parkingLotSystem.getCarPosition(vehicle);
