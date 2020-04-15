@@ -1,16 +1,17 @@
 package com.bridgelabz.parkinglot;
 
-import java.util.Arrays;
+import java.util.Map;
 
 public class ParkingAttendant {
 
-    public void park(Object[] carsInLot, Object vehicle, int position) throws ParkingLotException {
-        if (carsInLot[position] != null)
+    public void park(Map<String, Vehicle> carsInLot, Vehicle vehicle, String position) throws ParkingLotException {
+        if (carsInLot.containsKey("1 " + position))
             throw new ParkingLotException(ParkingLotException.ExceptionType.ALREADY_OCCUPIED, "Position Already Occupied");
-        carsInLot[position] = vehicle;
+        carsInLot.put("1 " + position, vehicle);
     }
 
-    public void unPark(Vehicle[] carsInLot, Object vehicle) {
-        carsInLot[Arrays.asList(carsInLot).indexOf(vehicle)] = null;
+    public void unPark(Map<String, Vehicle> carsInLot, Vehicle vehicle) {
+        carsInLot.entrySet().removeIf(entry -> vehicle.equals(entry.getValue()));
+
     }
 }

@@ -1,10 +1,10 @@
 package com.bridgelabz.parkinglot;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ParkingLotSystem {
-    public int PARKING_LOT_SIZE = 100;
-    public Vehicle[] carsInLot = new Vehicle[100];
+    public Map<String, Vehicle> carsInLot = new HashMap<>(100);
     public boolean isFull = false;
     public boolean isEmpty = true;
     private Owner owner;
@@ -15,17 +15,17 @@ public class ParkingLotSystem {
         this.parkingAttendant = parkingAttendant;
     }
 
-    public boolean park(Object vehicle, int position) throws ParkingLotException {
+    public boolean park(Vehicle vehicle, int position) throws ParkingLotException {
         if (isFull())
             throw new ParkingLotException(ParkingLotException.ExceptionType.LOT_FULL, "Lot Limit Reached");
         if (!this.isParked(vehicle)) {
-            parkingAttendant.park(carsInLot, vehicle, position);
+            parkingAttendant.park(carsInLot, vehicle, Integer.toString(position));
             return true;
         }
         throw new ParkingLotException(ParkingLotException.ExceptionType.IS_ALREADY_PARKED, "Is Already Parked");
     }
 
-    public boolean unPark(Object vehicle) throws ParkingLotException {
+    public boolean unPark(Vehicle vehicle) throws ParkingLotException {
         if (isEmpty())
             throw new ParkingLotException(ParkingLotException.ExceptionType.LOT_EMPTY, "Parking Lot Empty");
         if (this.isParked(vehicle)) {
@@ -36,8 +36,8 @@ public class ParkingLotSystem {
         throw new ParkingLotException(ParkingLotException.ExceptionType.IS_ALREADY_UNPARKED, "Is Already UnParked");
     }
 
-    public boolean isParked(Object vehicle) {
-        if (Arrays.asList(carsInLot).contains(vehicle))
+    public boolean isParked(Vehicle vehicle) {
+        if (carsInLot.containsValue(vehicle))
             return true;
         return false;
     }
@@ -52,7 +52,7 @@ public class ParkingLotSystem {
         return isEmpty;
     }
 
-    public int getCarPosition(Object vehicle) {
+    public String getCarPosition(Vehicle vehicle) {
         return new Driver().getCarPosition(carsInLot, vehicle);
     }
 }

@@ -10,11 +10,14 @@ public class ParkingLotTest {
 
     Vehicle vehicle = null;
     ParkingLotSystem parkingLotSystem = null;
+    int PARKING_LOT_SIZE = 100;
+    int count = 0;
 
     @Before
     public void setup() {
         vehicle = new Vehicle(new Date());
         parkingLotSystem = new ParkingLotSystem(new Owner(), new ParkingAttendant());
+        count = PARKING_LOT_SIZE;
     }
 
     @Test
@@ -86,7 +89,6 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenLotFull_ThenReturnTrue() {
         try {
-            int count = parkingLotSystem.carsInLot.length;
             while (count-- > 0)
                 parkingLotSystem.park(new Vehicle(new Date()), count);
             boolean isFull = parkingLotSystem.isFull();
@@ -99,7 +101,6 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenLotFull_ThenThrowException() {
         try {
-            int count = parkingLotSystem.carsInLot.length;
             while (count-- > 0)
                 parkingLotSystem.park(new Vehicle(new Date()), count);
             boolean isParked = parkingLotSystem.park(new Vehicle(new Date()), 99);
@@ -112,7 +113,6 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenLotFull_ThenRedirectSecurity() {
         try {
-            int count = parkingLotSystem.carsInLot.length;
             while (count-- > 0)
                 parkingLotSystem.park(new Vehicle(new Date()), count);
             AirportSecurity airportSecurity = new AirportSecurity(parkingLotSystem);
@@ -126,7 +126,6 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenLotNotFull_ThenDontRedirectSecurity() {
         try {
-            int count = parkingLotSystem.carsInLot.length;
             while (count-- > 1)
                 parkingLotSystem.park(new Vehicle(new Date()), count);
             AirportSecurity airportSecurity = new AirportSecurity(parkingLotSystem);
@@ -140,7 +139,6 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenLotNotFull_ThenTakeOffFullSign() {
         try {
-            int count = parkingLotSystem.carsInLot.length;
             while (count-- > 1)
                 parkingLotSystem.park(new Vehicle(new Date()), count);
             parkingLotSystem.park(vehicle, 0);
@@ -176,19 +174,8 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenDriverEntersCar_ThenReturnPosition() {
         try {
             parkingLotSystem.park(vehicle, 45);
-            int position = parkingLotSystem.getCarPosition(vehicle);
-            Assert.assertEquals(45, position);
-        } catch (ParkingLotException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void givenParkingAttendant_ShouldDistributeEvenly() {
-        try {
-            parkingLotSystem.park(vehicle, 45);
-            int position = parkingLotSystem.getCarPosition(vehicle);
-            Assert.assertEquals(45, position);
+            String position = parkingLotSystem.getCarPosition(vehicle);
+            Assert.assertEquals("1 45", position);
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
