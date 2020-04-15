@@ -77,7 +77,7 @@ public class ParkingLotTest {
             boolean isFull = parkingLotSystem.isFull();
             Assert.assertFalse(isFull);
         } catch (ParkingLotException e) {
-            Assert.assertEquals(ParkingLotException.ExceptionType.IS_ALREADY_UNPARKED, e.type);
+            e.printStackTrace();
         }
     }
 
@@ -89,7 +89,7 @@ public class ParkingLotTest {
             boolean isFull = parkingLotSystem.isFull();
             Assert.assertTrue(isFull);
         } catch (ParkingLotException e) {
-            Assert.assertEquals(ParkingLotException.ExceptionType.IS_ALREADY_UNPARKED, e.type);
+            e.printStackTrace();
         }
     }
 
@@ -102,6 +102,32 @@ public class ParkingLotTest {
             Assert.assertTrue(isParked);
         } catch (ParkingLotException e) {
             Assert.assertEquals(ParkingLotException.ExceptionType.LOT_FULL, e.type);
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenLotFull_ThenRedirectSecurity() {
+        try {
+            while(parkingLotSystem.carsInLot.size() < 100)
+                parkingLotSystem.park(new Object());
+            AirportSecurity airportSecurity = new AirportSecurity(parkingLotSystem);
+            boolean redirectSecurity = airportSecurity.redirectSecurity();
+            Assert.assertTrue(redirectSecurity);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenLotNotFull_ThenDontRedirectSecurity() {
+        try {
+            while(parkingLotSystem.carsInLot.size() < 99)
+                parkingLotSystem.park(new Object());
+            AirportSecurity airportSecurity = new AirportSecurity(parkingLotSystem);
+            boolean redirectSecurity = airportSecurity.redirectSecurity();
+            Assert.assertFalse(redirectSecurity);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
         }
     }
 }
