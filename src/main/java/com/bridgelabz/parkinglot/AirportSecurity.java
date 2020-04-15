@@ -9,7 +9,7 @@ public class AirportSecurity {
     }
 
     public boolean redirectSecurity() {
-        if(parkingLotSystem.isFull())
+        if (parkingLotSystem.isFull())
             return true;
         return false;
     }
