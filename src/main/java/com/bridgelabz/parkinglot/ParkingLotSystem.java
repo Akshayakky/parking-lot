@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 public class ParkingLotSystem {
     public int PARKING_LOT_SIZE = 100;
-    //    public ArrayList<Object> carsInLot = new ArrayList<>();
     public Object[] carsInLot = new Object[100];
     public int isFull = 0;
 

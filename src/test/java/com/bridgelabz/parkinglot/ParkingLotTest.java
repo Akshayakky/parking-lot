@@ -4,14 +4,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Date;
+
 public class ParkingLotTest {
 
-    Object vehicle = null;
+    Vehicle vehicle = null;
     ParkingLotSystem parkingLotSystem = null;
 
     @Before
     public void setup() {
-        vehicle = new Object();
+        vehicle = new Vehicle(new Date());
         parkingLotSystem = new ParkingLotSystem();
     }
 
@@ -51,7 +53,7 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenAlreadyUnparked_ThenThrowException() {
         try {
             parkingLotSystem.park(vehicle, 1);
-            parkingLotSystem.park(new Object(), 2);
+            parkingLotSystem.park(new Vehicle(new Date()), 2);
             parkingLotSystem.unPark(vehicle);
             boolean isUnparked = parkingLotSystem.unPark(vehicle);
             Assert.assertTrue(isUnparked);
@@ -86,7 +88,7 @@ public class ParkingLotTest {
         try {
             int count = parkingLotSystem.carsInLot.length;
             while (count-- > 0)
-                parkingLotSystem.park(new Object(), count);
+                parkingLotSystem.park(new Vehicle(new Date()), count);
             boolean isFull = parkingLotSystem.isFull();
             Assert.assertTrue(isFull);
         } catch (ParkingLotException e) {
@@ -99,8 +101,8 @@ public class ParkingLotTest {
         try {
             int count = parkingLotSystem.carsInLot.length;
             while (count-- > 0)
-                parkingLotSystem.park(new Object(), count);
-            boolean isParked = parkingLotSystem.park(new Object(), 99);
+                parkingLotSystem.park(new Vehicle(new Date()), count);
+            boolean isParked = parkingLotSystem.park(new Vehicle(new Date()), 99);
             Assert.assertTrue(isParked);
         } catch (ParkingLotException e) {
             Assert.assertEquals(ParkingLotException.ExceptionType.LOT_FULL, e.type);
@@ -112,7 +114,7 @@ public class ParkingLotTest {
         try {
             int count = parkingLotSystem.carsInLot.length;
             while (count-- > 0)
-                parkingLotSystem.park(new Object(), count);
+                parkingLotSystem.park(new Vehicle(new Date()), count);
             AirportSecurity airportSecurity = new AirportSecurity(parkingLotSystem);
             boolean redirectSecurity = airportSecurity.redirectSecurity();
             Assert.assertTrue(redirectSecurity);
@@ -126,7 +128,7 @@ public class ParkingLotTest {
         try {
             int count = parkingLotSystem.carsInLot.length;
             while (count-- > 1)
-                parkingLotSystem.park(new Object(), count);
+                parkingLotSystem.park(new Vehicle(new Date()), count);
             AirportSecurity airportSecurity = new AirportSecurity(parkingLotSystem);
             boolean redirectSecurity = airportSecurity.redirectSecurity();
             Assert.assertFalse(redirectSecurity);
@@ -140,7 +142,7 @@ public class ParkingLotTest {
         try {
             int count = parkingLotSystem.carsInLot.length;
             while (count-- > 1)
-                parkingLotSystem.park(new Object(), count);
+                parkingLotSystem.park(new Vehicle(new Date()), count);
             parkingLotSystem.park(vehicle, 0);
             parkingLotSystem.unPark(vehicle);
             Assert.assertEquals(0, parkingLotSystem.isFull);
@@ -163,7 +165,7 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenPositionOccupied_ThenThrowException() {
         try {
             parkingLotSystem.park(vehicle, 45);
-            boolean isParked = parkingLotSystem.park(new Object(), 45);
+            boolean isParked = parkingLotSystem.park(new Vehicle(new Date()), 45);
             Assert.assertTrue(isParked);
         } catch (ParkingLotException e) {
             Assert.assertEquals(ParkingLotException.ExceptionType.ALREADY_OCCUPIED, e.type);
