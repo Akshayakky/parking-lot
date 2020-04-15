@@ -41,7 +41,7 @@ public class ParkingLotTest {
         try {
             parkingLotSystem.park(vehicle);
             boolean isParked = parkingLotSystem.park(vehicle);
-            Assert.assertFalse(isParked);
+            Assert.assertTrue(isParked);
         } catch (ParkingLotException e) {
             Assert.assertEquals(ParkingLotException.ExceptionType.IS_ALREADY_PARKED, e.type);
         }
@@ -50,10 +50,58 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenAlreadyUnparked_ThenThrowException() {
         try {
+            parkingLotSystem.park(vehicle);
+            parkingLotSystem.park(new Object());
+            parkingLotSystem.unPark(vehicle);
             boolean isUnparked = parkingLotSystem.unPark(vehicle);
-            Assert.assertFalse(isUnparked);
+            Assert.assertTrue(isUnparked);
         } catch (ParkingLotException e) {
             Assert.assertEquals(ParkingLotException.ExceptionType.IS_ALREADY_UNPARKED, e.type);
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenLotEmpty_ThenThrowException() {
+        try {
+            boolean isUnparked = parkingLotSystem.unPark(vehicle);
+            Assert.assertTrue(isUnparked);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.LOT_EMPTY, e.type);
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenLotNotFull_ThenReturnFalse() {
+        try {
+            parkingLotSystem.park(vehicle);
+            boolean isFull = parkingLotSystem.isFull();
+            Assert.assertFalse(isFull);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.IS_ALREADY_UNPARKED, e.type);
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenLotFull_ThenReturnTrue() {
+        try {
+            while(parkingLotSystem.carsInLot.size() < 100)
+            parkingLotSystem.park(new Object());
+            boolean isFull = parkingLotSystem.isFull();
+            Assert.assertTrue(isFull);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.IS_ALREADY_UNPARKED, e.type);
+        }
+    }
+
+    @Test
+    public void givenParkingLot_WhenLotFull_ThenThrowException() {
+        try {
+            while(parkingLotSystem.carsInLot.size() < 100)
+                parkingLotSystem.park(new Object());
+            boolean isParked = parkingLotSystem.park(new Object());
+            Assert.assertTrue(isParked);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.LOT_FULL, e.type);
         }
     }
 }
