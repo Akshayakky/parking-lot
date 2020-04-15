@@ -130,4 +130,17 @@ public class ParkingLotTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void givenParkingLot_WhenLotNotFull_ThenTakeOffFullSign() {
+        try {
+            while(parkingLotSystem.carsInLot.size() < 99)
+                parkingLotSystem.park(new Object());
+            parkingLotSystem.park(vehicle);
+            parkingLotSystem.unPark(vehicle);
+            Assert.assertEquals(0, parkingLotSystem.isFull);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
 }
