@@ -1,9 +1,7 @@
 package com.bridgelabz.parkinglot;
 
-import java.util.Map;
-
 public interface IParkingLotObserver {
-    boolean isFull(Map<String, Vehicle> carsInLot);
+    boolean isFull(int lotNumber);
 
-    boolean isEmpty(Map<String, Vehicle> carsInLot);
+    boolean isEmpty(int lotNumber);
 }

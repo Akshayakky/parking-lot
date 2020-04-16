@@ -8,8 +8,8 @@ public class AirportSecurity {
         this.parkingLotSystem = parkingLotSystem;
     }
 
-    public boolean redirectSecurity() {
-        if (parkingLotSystem.isFull())
+    public boolean redirectSecurity(int lotNumber) {
+        if (parkingLotSystem.isFull(lotNumber))
             return true;
         return false;
     }
