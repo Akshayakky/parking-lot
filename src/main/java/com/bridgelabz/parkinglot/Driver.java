@@ -1,10 +1,14 @@
 package com.bridgelabz.parkinglot;
 
-import java.util.Map;
-
 public class Driver {
 
-    public String getCarPosition(Map<String, Vehicle> carsInLot, Vehicle vehicle) {
-        return carsInLot.keySet().stream().filter(key -> vehicle.equals(carsInLot.get(key))).findFirst().get();
+    private ParkingLotSystem parkingLotSystem;
+
+    public Driver(ParkingLotSystem parkingLotSystem) {
+        this.parkingLotSystem = parkingLotSystem;
+    }
+
+    public String getCarPosition(Vehicle vehicle) {
+        return parkingLotSystem.getCarPosition(vehicle);
     }
 }
