@@ -19,22 +19,19 @@ public class ParkingLotSystem {
         this.NO_OF_LOTS = NO_OF_LOTS;
     }
 
-    public boolean park(Vehicle vehicle) throws ParkingLotException {
-//        parkingAttendant.updateLots();
-        if (!parkingAttendant.isParked(vehicle)) {
-            parkingAttendant.park(vehicle);
-            return true;
-        }
-        throw new ParkingLotException(ParkingLotException.ExceptionType.IS_ALREADY_PARKED, "Is Already Parked");
+    public boolean park(Vehicle vehicle, String... position) throws ParkingLotException {
+        parkingAttendant.updateLots();
+        if (parkingAttendant.isParked(vehicle))
+            throw new ParkingLotException(ParkingLotException.ExceptionType.IS_ALREADY_PARKED, "Is Already Parked");
+        parkingAttendant.park(vehicle, position);
+        return true;
     }
 
     public boolean unPark(Vehicle vehicle) throws ParkingLotException {
-        if (parkingAttendant.isParked(vehicle)) {
-            parkingAttendant.unPark(vehicle);
-            isFull(1);
-            return true;
-        }
-        throw new ParkingLotException(ParkingLotException.ExceptionType.IS_ALREADY_UNPARKED, "Is Already UnParked");
+        if (!parkingAttendant.isParked(vehicle))
+            throw new ParkingLotException(ParkingLotException.ExceptionType.IS_ALREADY_UNPARKED, "Is Already UnParked");
+        parkingAttendant.unPark(vehicle);
+        return true;
     }
 
     public boolean isFull(int lotNumber) {
@@ -57,8 +54,8 @@ public class ParkingLotSystem {
         return (int) carsInLot.keySet().stream().filter(k -> k.contains("P" + lotNumber)).count();
     }
 
-    public void updateObservers(int lotNumber) {
-        parkingLotOwner.isFull(lotNumber);
-        airportSecurity.isFull(lotNumber);
+    public void updateObservers(String position) {
+        parkingLotOwner.isFull(position);
+        airportSecurity.isFull(position);
     }
 }

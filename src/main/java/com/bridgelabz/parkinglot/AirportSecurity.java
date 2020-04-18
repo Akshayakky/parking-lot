@@ -10,7 +10,7 @@ public class AirportSecurity implements IParkingLotObserver {
     }
 
     @Override
-    public void isFull(int lotNumber) {
-        this.isFull = parkingLotSystem.isFull(lotNumber);
+    public void isFull(String position) {
+        this.isFull = parkingLotSystem.isFull(Integer.parseInt(position.split(" ")[0].substring(1)));
     }
 }

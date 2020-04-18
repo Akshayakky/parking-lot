@@ -3,18 +3,18 @@ package com.bridgelabz.parkinglot;
 public class Driver {
 
     private ParkingLotSystem parkingLotSystem;
-    public IsHandicapped isHandicapped;
+    public IsHandicap isHandicap;
 
     public Driver(ParkingLotSystem parkingLotSystem) {
         this.parkingLotSystem = parkingLotSystem;
     }
 
-    public Driver(ParkingLotSystem parkingLotSystem, IsHandicapped isHandicapped) {
+    public Driver(ParkingLotSystem parkingLotSystem, IsHandicap isHandicap) {
         this.parkingLotSystem = parkingLotSystem;
-        this.isHandicapped = isHandicapped;
+        this.isHandicap = isHandicap;
     }
 
-    enum IsHandicapped {
+    enum IsHandicap {
         NO, YES;
     }
 

@@ -13,22 +13,28 @@ public class ParkingAttendant {
         this.parkingLotSystem = parkingLotSystem;
     }
 
-    public void park(Vehicle vehicle) throws ParkingLotException {
+    public void park(Vehicle vehicle, String... positionArray) throws ParkingLotException {
+        String position;
+        position = (positionArray.length == 0) ? getParkingPosition(vehicle) : positionArray[0];
+        if (parkingLotSystem.carsInLot.containsKey(position))
+            throw new ParkingLotException(ParkingLotException.ExceptionType.ALREADY_OCCUPIED, "Position Already Occupied");
+        parkingLotSystem.carsInLot.put(position, vehicle);
+        parkingLotSystem.updateObservers(position);
         updateLots();
-        int lot = 0;
-        if (vehicle.driver.isHandicapped == Driver.IsHandicapped.YES)
-            lot = getNearestEmptyLot();
+    }
+
+    public String getParkingPosition(Vehicle vehicle) throws ParkingLotException {
+        int lot;
+        if (vehicle.driver.isHandicap == Driver.IsHandicap.YES)
+            lot = getNearestFreeSpaceLot();
         else
             lot = getLotWithMinimumCars();
         if (parkingLotSystem.isFull(lot))
             throw new ParkingLotException(ParkingLotException.ExceptionType.LOTS_FULL, "All Lots Full");
-        String key = "P" + lot + " " + (noOfCars.get(lot) + 1);
-        parkingLotSystem.carsInLot.put(key, vehicle);
-        parkingLotSystem.updateObservers(lot);
-        updateLots();
+        return "P" + lot + " " + (noOfCars.get(lot) + 1);
     }
 
-    private int getNearestEmptyLot() {
+    private int getNearestFreeSpaceLot() {
         return noOfCars.keySet().stream().filter(key -> noOfCars.get(key) < parkingLotSystem.PARKING_LOT_SIZE)
                 .findFirst().get();
     }
@@ -48,11 +54,12 @@ public class ParkingAttendant {
     }
 
     public void unPark(Vehicle vehicle) {
-        int lotNumber = Integer.parseInt(parkingLotSystem.carsInLot.keySet().stream()
+        String position = parkingLotSystem.carsInLot.keySet().stream()
                 .filter(key -> vehicle.equals(parkingLotSystem.carsInLot.get(key)))
-                .findFirst().get().split(" ")[0].substring(1));
+                .findFirst().get();
         parkingLotSystem.carsInLot.entrySet().removeIf(entry -> vehicle.equals(entry.getValue()));
-        parkingLotSystem.updateObservers(lotNumber);
+        parkingLotSystem.updateObservers(position);
+        updateLots();
     }
 
     public boolean isParked(Vehicle vehicle) {
