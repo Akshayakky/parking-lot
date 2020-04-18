@@ -242,4 +242,21 @@ public class ParkingLotTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void givenParkingAttendant_WhenCarIsLargeTest2_ThenParkInLotWithMaximumFreeSpace() {
+        try {
+            parkingLotSystem = new ParkingLotSystem(4, PARKING_LOT_SIZE);
+            Date date = new Date();
+            Driver driver = new Driver(parkingLotSystem, Driver.IsHandicap.NO);
+            parkingLotSystem.park(new Vehicle(date, driver, Vehicle.Size.SMALL), "P1 1");
+            parkingLotSystem.park(new Vehicle(date, driver, Vehicle.Size.SMALL), "P2 1");
+            parkingLotSystem.park(new Vehicle(date, driver, Vehicle.Size.SMALL), "P4 1");
+            Vehicle largeVehicle = new Vehicle(date, driver, Vehicle.Size.LARGE);
+            parkingLotSystem.park(largeVehicle);
+            Assert.assertEquals("P3", parkingLotSystem.carsInLot.keySet().stream().filter(key -> largeVehicle.equals(parkingLotSystem.carsInLot.get(key))).findFirst().get().split(" ")[0]);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
 }
