@@ -14,21 +14,35 @@ public class ParkingAttendant {
     }
 
     public void park(Vehicle vehicle) throws ParkingLotException {
-        int lot = getLotWithLeastCars();
+        updateLots();
+        int lot = 0;
+        if (vehicle.driver.isHandicapped == Driver.IsHandicapped.YES)
+            lot = getNearestEmptyLot();
+        else
+            lot = getLotWithMinimumCars();
         if (parkingLotSystem.isFull(lot))
             throw new ParkingLotException(ParkingLotException.ExceptionType.LOTS_FULL, "All Lots Full");
         String key = "P" + lot + " " + (noOfCars.get(lot) + 1);
         parkingLotSystem.carsInLot.put(key, vehicle);
         parkingLotSystem.updateObservers(lot);
+        updateLots();
     }
 
-    private int getLotWithLeastCars() {
+    private int getNearestEmptyLot() {
+        return noOfCars.keySet().stream().filter(key -> noOfCars.get(key) < parkingLotSystem.PARKING_LOT_SIZE)
+                .findFirst().get();
+    }
+
+    public void updateLots() {
         int currentLot = 0;
         while (currentLot++ < parkingLotSystem.NO_OF_LOTS) {
             int finalI = currentLot;
             noOfCars.put(currentLot, (int) parkingLotSystem.carsInLot.keySet().stream().filter(k -> k
                     .contains("P" + finalI)).count());
         }
+    }
+
+    private int getLotWithMinimumCars() {
         return noOfCars.keySet().stream().filter(key -> Collections.min(noOfCars.values()).equals(noOfCars.get(key)))
                 .findFirst().get();
     }
@@ -45,9 +59,5 @@ public class ParkingAttendant {
         if (parkingLotSystem.carsInLot.containsValue(vehicle))
             return true;
         return false;
-    }
-
-    public int getNumberOfCars(String parkingLot) {
-        return (int) parkingLotSystem.carsInLot.keySet().stream().filter(k -> k.contains("P" + parkingLot)).count();
     }
 }

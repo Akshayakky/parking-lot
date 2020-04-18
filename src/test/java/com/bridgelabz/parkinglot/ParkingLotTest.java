@@ -11,7 +11,7 @@ public class ParkingLotTest {
     int PARKING_LOT_SIZE;
     int NO_OF_LOTS;
 
-    int carPark;
+    int carsInPark;
 
     ParkingLotSystem parkingLotSystem = null;
     Vehicle vehicle = null;
@@ -20,8 +20,8 @@ public class ParkingLotTest {
     public void setup() {
         PARKING_LOT_SIZE = 100;
         NO_OF_LOTS = 1;
-        carPark = 0;
-        vehicle = new Vehicle(new Date());
+        carsInPark = 0;
+        vehicle = new Vehicle(new Date(), new Driver(parkingLotSystem, Driver.IsHandicapped.NO));
         parkingLotSystem = new ParkingLotSystem(NO_OF_LOTS, PARKING_LOT_SIZE);
     }
 
@@ -110,8 +110,8 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenLotFull_ThenReturnTrue() {
         try {
-            while (carPark++ < PARKING_LOT_SIZE)
-                parkingLotSystem.park(new Vehicle(new Date()));
+            while (carsInPark++ < PARKING_LOT_SIZE)
+                parkingLotSystem.park(new Vehicle(new Date(), new Driver(parkingLotSystem, Driver.IsHandicapped.NO)));
             boolean isFull = parkingLotSystem.isFull(1);
             Assert.assertTrue(isFull);
         } catch (ParkingLotException e) {
@@ -122,9 +122,9 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenLotFull_ThenThrowException() {
         try {
-            while (carPark++ < NO_OF_LOTS * PARKING_LOT_SIZE)
-                parkingLotSystem.park(new Vehicle(new Date()));
-            boolean isParked = parkingLotSystem.park(new Vehicle(new Date()));
+            while (carsInPark++ < NO_OF_LOTS * PARKING_LOT_SIZE)
+                parkingLotSystem.park(new Vehicle(new Date(), new Driver(parkingLotSystem, Driver.IsHandicapped.NO)));
+            boolean isParked = parkingLotSystem.park(new Vehicle(new Date(), new Driver(parkingLotSystem, Driver.IsHandicapped.NO)));
             Assert.assertTrue(isParked);
         } catch (ParkingLotException e) {
             Assert.assertEquals(ParkingLotException.ExceptionType.LOTS_FULL, e.type);
@@ -134,8 +134,8 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenLotFull_ThenRedirectSecurity() {
         try {
-            while (carPark++ < PARKING_LOT_SIZE)
-                parkingLotSystem.park(new Vehicle(new Date()));
+            while (carsInPark++ < PARKING_LOT_SIZE)
+                parkingLotSystem.park(new Vehicle(new Date(), new Driver(parkingLotSystem, Driver.IsHandicapped.NO)));
             boolean redirectSecurity = parkingLotSystem.airportSecurity.isFull;
             Assert.assertTrue(redirectSecurity);
         } catch (ParkingLotException e) {
@@ -146,8 +146,8 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenLotNotFull_ThenDontRedirectSecurity() {
         try {
-            while (carPark++ < PARKING_LOT_SIZE - 1)
-                parkingLotSystem.park(new Vehicle(new Date()));
+            while (carsInPark++ < PARKING_LOT_SIZE - 1)
+                parkingLotSystem.park(new Vehicle(new Date(), new Driver(parkingLotSystem, Driver.IsHandicapped.NO)));
             boolean redirectSecurity = parkingLotSystem.airportSecurity.isFull;
             Assert.assertFalse(redirectSecurity);
         } catch (ParkingLotException e) {
@@ -158,8 +158,8 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLot_WhenLotNotFull_ThenTakeOffFullSign() {
         try {
-            while (carPark++ < PARKING_LOT_SIZE - 1)
-                parkingLotSystem.park(new Vehicle(new Date()));
+            while (carsInPark++ < PARKING_LOT_SIZE - 1)
+                parkingLotSystem.park(new Vehicle(new Date(), new Driver(parkingLotSystem, Driver.IsHandicapped.NO)));
             Assert.assertFalse(parkingLotSystem.isFull(1));
         } catch (ParkingLotException e) {
             e.printStackTrace();
@@ -192,10 +192,25 @@ public class ParkingLotTest {
     public void givenParkingAttendant_ShouldDistributeTrafficEvenly() {
         try {
             parkingLotSystem = new ParkingLotSystem(4, PARKING_LOT_SIZE);
-            while (carPark++ < 100)
-                parkingLotSystem.park(new Vehicle(new Date()));
-            int carsInLot1 = parkingLotSystem.getNumberOfCars("1");
-            Assert.assertEquals(25, carsInLot1);
+            while (carsInPark++ < 120)
+                parkingLotSystem.park(new Vehicle(new Date(), new Driver(parkingLotSystem, Driver.IsHandicapped.NO)));
+            int carsInLot1 = parkingLotSystem.getNumberOfCars(1);
+            Assert.assertEquals(30, carsInLot1);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenParkingAttendant_WhenDriverHandicap_ThenParkNearestEmptyLot() {
+        try {
+            parkingLotSystem = new ParkingLotSystem(4, PARKING_LOT_SIZE);
+            while (carsInPark++ < 120)
+                parkingLotSystem.park(new Vehicle(new Date(), new Driver(parkingLotSystem, Driver.IsHandicapped.YES)));
+            int carsInLot1 = parkingLotSystem.getNumberOfCars(1);
+            int carsInLot2 = parkingLotSystem.getNumberOfCars(2);
+            Assert.assertEquals(100, carsInLot1);
+            Assert.assertEquals(20, carsInLot2);
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }

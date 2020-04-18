@@ -20,6 +20,7 @@ public class ParkingLotSystem {
     }
 
     public boolean park(Vehicle vehicle) throws ParkingLotException {
+//        parkingAttendant.updateLots();
         if (!parkingAttendant.isParked(vehicle)) {
             parkingAttendant.park(vehicle);
             return true;
@@ -52,8 +53,8 @@ public class ParkingLotSystem {
         return carsInLot.keySet().stream().filter(key -> vehicle.equals(carsInLot.get(key))).findFirst().get();
     }
 
-    public int getNumberOfCars(String parkingLot) {
-        return parkingAttendant.getNumberOfCars(parkingLot);
+    public int getNumberOfCars(int lotNumber) {
+        return (int) carsInLot.keySet().stream().filter(k -> k.contains("P" + lotNumber)).count();
     }
 
     public void updateObservers(int lotNumber) {
