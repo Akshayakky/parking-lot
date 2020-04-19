@@ -34,14 +34,14 @@ public class ParkingLotSystem {
         return true;
     }
 
-    public boolean isFull(int lotNumber) {
-        if (carsInLot.keySet().stream().filter(k -> k.contains("P" + lotNumber)).count() == PARKING_LOT_SIZE)
+    public boolean isFull() {
+        if (NO_OF_LOTS * PARKING_LOT_SIZE == carsInLot.size())
             return true;
         return false;
     }
 
-    public boolean isEmpty(int lotNumber) {
-        if (carsInLot.keySet().stream().filter(k -> k.contains("P" + lotNumber)).count() == 0)
+    public boolean isEmpty() {
+        if (carsInLot.size() == 0)
             return true;
         return false;
     }
@@ -54,8 +54,8 @@ public class ParkingLotSystem {
         return (int) carsInLot.keySet().stream().filter(k -> k.contains("P" + lotNumber)).count();
     }
 
-    public void updateObservers(String position) {
-        parkingLotOwner.isFull(position);
-        airportSecurity.isFull(position);
+    public void updateObservers() {
+        parkingLotOwner.isFull();
+        airportSecurity.isFull();
     }
 }

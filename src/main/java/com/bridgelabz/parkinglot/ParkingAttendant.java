@@ -19,7 +19,7 @@ public class ParkingAttendant {
         if (parkingLotSystem.carsInLot.containsKey(position))
             throw new ParkingLotException(ParkingLotException.ExceptionType.ALREADY_OCCUPIED, "Position Already Occupied");
         parkingLotSystem.carsInLot.put(position, vehicle);
-        parkingLotSystem.updateObservers(position);
+        parkingLotSystem.updateObservers();
         updateLots();
     }
 
@@ -29,7 +29,7 @@ public class ParkingAttendant {
             lot = getNearestFreeSpaceLot();
         else
             lot = getLotWithMinimumCars();
-        if (parkingLotSystem.isFull(lot))
+        if (parkingLotSystem.isFull())
             throw new ParkingLotException(ParkingLotException.ExceptionType.LOTS_FULL, "All Lots Full");
         return "P" + lot + " " + (noOfCars.get(lot) + 1);
     }
@@ -54,11 +54,8 @@ public class ParkingAttendant {
     }
 
     public void unPark(Vehicle vehicle) {
-        String position = parkingLotSystem.carsInLot.keySet().stream()
-                .filter(key -> vehicle.equals(parkingLotSystem.carsInLot.get(key)))
-                .findFirst().get();
         parkingLotSystem.carsInLot.entrySet().removeIf(entry -> vehicle.equals(entry.getValue()));
-        parkingLotSystem.updateObservers(position);
+        parkingLotSystem.updateObservers();
         updateLots();
     }
 
