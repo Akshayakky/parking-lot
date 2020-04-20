@@ -1,6 +1,7 @@
 package com.bridgelabz.parkinglot;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -31,6 +32,9 @@ public class PoliceDepartment {
                 return e -> object.equals(e.getValue().color);
             case "com.bridgelabz.parkinglot.Vehicle$Brand":
                 return e -> object.equals(e.getValue().brand);
+            case "java.lang.Integer" :
+                return e -> (e.getValue().dateParking).after(new Date(System.currentTimeMillis() - Integer
+                        .parseInt(object.toString()) * 1000));
             default:
                 return e -> object.equals(e.getValue());
         }

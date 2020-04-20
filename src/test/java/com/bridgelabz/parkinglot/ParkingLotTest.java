@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ParkingLotTest {
@@ -265,7 +265,7 @@ public class ParkingLotTest {
         try {
             parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
             PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
-            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.WHITE, plateNumber, brand),"P1 1");
+            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.WHITE, plateNumber, brand));
             Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(Vehicle.Color.WHITE);
             Assert.assertEquals(1, vehicles.size());
         } catch (ParkingLotException e) {
@@ -278,7 +278,7 @@ public class ParkingLotTest {
         try {
             parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
             PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
-            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, brand),"P1 1");
+            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, brand));
             Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(Vehicle.Color.WHITE);
             Assert.assertEquals(0, vehicles.size());
         } catch (ParkingLotException e) {
@@ -291,9 +291,9 @@ public class ParkingLotTest {
         try {
             parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
             PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
-            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.TOYOTA),"P1 1");
-            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.WHITE, plateNumber, Vehicle.Brand.TOYOTA),"P2 1");
-            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.BMW),"P3 1");
+            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.TOYOTA));
+            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.WHITE, plateNumber, Vehicle.Brand.TOYOTA));
+            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.BMW));
             Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(Vehicle.Color.BLUE, Vehicle.Brand.TOYOTA);
             Assert.assertEquals(1, vehicles.size());
         } catch (ParkingLotException e) {
@@ -306,9 +306,37 @@ public class ParkingLotTest {
         try {
             parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
             PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
-            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.BMW),"P1 1");
-            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.TOYOTA), "P2 1");
+            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.BMW));
+            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.TOYOTA));
             Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(Vehicle.Brand.BMW);
+            Assert.assertEquals(1, vehicles.size());
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenParkingLotSystem_ReturnCarsParkedInLast30Minutes() {
+        try {
+            parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
+            PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
+            parkingLotSystem.park(new Vehicle(attendantName, new Date(System.currentTimeMillis() - 1799 * 1000), driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.BMW));
+            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.TOYOTA));
+            Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(30 * 60);
+            Assert.assertEquals(2, vehicles.size());
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenParkingLotSystem_When1CarParkedInLast30Minutes_ThenReturn1Car() {
+        try {
+            parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
+            PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
+            parkingLotSystem.park(new Vehicle(attendantName, new Date(System.currentTimeMillis() - 1800 * 1000), driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.BMW));
+            parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.TOYOTA));
+            Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(30 * 60);
             Assert.assertEquals(1, vehicles.size());
         } catch (ParkingLotException e) {
             e.printStackTrace();
