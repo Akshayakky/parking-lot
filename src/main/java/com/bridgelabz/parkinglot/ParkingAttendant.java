@@ -8,9 +8,11 @@ public class ParkingAttendant {
 
     ParkingLotSystem parkingLotSystem;
     private Map<Integer, Integer> noOfCars = new HashMap<>();
+    String attendantName;
 
-    public ParkingAttendant(ParkingLotSystem parkingLotSystem) {
+    public ParkingAttendant(ParkingLotSystem parkingLotSystem, String attendantName) {
         this.parkingLotSystem = parkingLotSystem;
+        this.attendantName = attendantName;
     }
 
     public void park(Vehicle vehicle, String... positionArray) throws ParkingLotException {
@@ -25,10 +27,7 @@ public class ParkingAttendant {
 
     public String getParkingPosition(Vehicle vehicle) throws ParkingLotException {
         int lot;
-        if (vehicle.driver.isHandicap == Driver.IsHandicap.YES)
-            lot = getNearestFreeSpaceLot();
-        else
-            lot = getLotWithMinimumCars();
+        lot = (vehicle.driver.isHandicap == Driver.IsHandicap.YES) ? getNearestFreeSpaceLot() : getLotWithMinimumCars();
         if (parkingLotSystem.isFull())
             throw new ParkingLotException(ParkingLotException.ExceptionType.LOTS_FULL, "All Lots Full");
         return "P" + lot + " " + (noOfCars.get(lot) + 1);
@@ -60,8 +59,6 @@ public class ParkingAttendant {
     }
 
     public boolean isParked(Vehicle vehicle) {
-        if (parkingLotSystem.carsInLot.containsValue(vehicle))
-            return true;
-        return false;
+        return (parkingLotSystem.carsInLot.containsValue(vehicle)) ? true : false;
     }
 }

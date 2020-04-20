@@ -11,8 +11,8 @@ public class ParkingLotSystem {
     public ParkingLotOwner parkingLotOwner;
     public int PARKING_LOT_SIZE;
 
-    public ParkingLotSystem(int NO_OF_LOTS, int PARKING_LOT_SIZE) {
-        this.parkingAttendant = new ParkingAttendant(this);
+    public ParkingLotSystem(String attendantName, int NO_OF_LOTS, int PARKING_LOT_SIZE) {
+        this.parkingAttendant = new ParkingAttendant(this, attendantName);
         this.parkingLotOwner = new ParkingLotOwner(this);
         this.airportSecurity = new AirportSecurity(this);
         this.PARKING_LOT_SIZE = PARKING_LOT_SIZE;
@@ -35,15 +35,11 @@ public class ParkingLotSystem {
     }
 
     public boolean isFull() {
-        if (NO_OF_LOTS * PARKING_LOT_SIZE == carsInLot.size())
-            return true;
-        return false;
+        return (NO_OF_LOTS * PARKING_LOT_SIZE == carsInLot.size()) ? true : false;
     }
 
     public boolean isEmpty() {
-        if (carsInLot.size() == 0)
-            return true;
-        return false;
+        return (carsInLot.size() == 0) ? true : false;
     }
 
     public String getCarPosition(Vehicle vehicle) {
