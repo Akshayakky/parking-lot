@@ -302,7 +302,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenParkingLotSystem_WhenCarBrand_ThenReturnCars() {
+    public void givenParkingLotSystem_WhenCarBrandGiven_ThenReturnCars() {
         try {
             parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
             PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
