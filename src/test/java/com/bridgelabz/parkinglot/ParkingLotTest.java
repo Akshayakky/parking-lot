@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -38,7 +37,7 @@ public class ParkingLotTest {
         date = new Date();
         driver = new Driver(parkingLotSystem, Driver.IsHandicap.NO);
         attendantName = "Attendant Name";
-        vehicle = new Vehicle(attendantName, date, driver, size, color,plateNumber, brand);
+        vehicle = new Vehicle(attendantName, date, driver, size, color, plateNumber, brand);
         parkingLotSystem = new ParkingLotSystem(attendantName, NO_OF_LOTS, PARKING_LOT_SIZE);
     }
 
@@ -139,7 +138,7 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenLotFull_ThenReturnTrue() {
         try {
             while (carsInPark++ < PARKING_LOT_SIZE)
-                parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color,plateNumber, brand));
+                parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color, plateNumber, brand));
             boolean isFull = parkingLotSystem.isFull();
             Assert.assertTrue(isFull);
         } catch (ParkingLotException e) {
@@ -151,7 +150,7 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenLotFull_ThenThrowException() {
         try {
             while (carsInPark++ < NO_OF_LOTS * PARKING_LOT_SIZE)
-                parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color,plateNumber, brand));
+                parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color, plateNumber, brand));
             boolean isParked = parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color, plateNumber, brand));
             Assert.assertTrue(isParked);
         } catch (ParkingLotException e) {
@@ -163,7 +162,7 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenLotFull_ThenRedirectSecurity() {
         try {
             while (carsInPark++ < PARKING_LOT_SIZE)
-                parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color,plateNumber, brand));
+                parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color, plateNumber, brand));
             boolean redirectSecurity = parkingLotSystem.airportSecurity.isFull;
             Assert.assertTrue(redirectSecurity);
         } catch (ParkingLotException e) {
@@ -175,7 +174,7 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenLotNotFull_ThenDontRedirectSecurity() {
         try {
             while (carsInPark++ < PARKING_LOT_SIZE - 1)
-                parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color,plateNumber, brand));
+                parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color, plateNumber, brand));
             boolean redirectSecurity = parkingLotSystem.airportSecurity.isFull;
             Assert.assertFalse(redirectSecurity);
         } catch (ParkingLotException e) {
@@ -187,7 +186,7 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenLotNotFull_ThenTakeOffFullSign() {
         try {
             while (carsInPark++ < PARKING_LOT_SIZE - 1)
-                parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color,plateNumber, brand));
+                parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color, plateNumber, brand));
             Assert.assertFalse(parkingLotSystem.isFull());
         } catch (ParkingLotException e) {
             e.printStackTrace();
@@ -221,7 +220,7 @@ public class ParkingLotTest {
         try {
             parkingLotSystem = new ParkingLotSystem(attendantName, 4, PARKING_LOT_SIZE);
             while (carsInPark++ < 120)
-                parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color,plateNumber, brand));
+                parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color, plateNumber, brand));
             int carsInLot1 = parkingLotSystem.getNumberOfCars(1);
             Assert.assertEquals(30, carsInLot1);
         } catch (ParkingLotException e) {
@@ -232,7 +231,7 @@ public class ParkingLotTest {
     @Test
     public void givenParkingAttendant_WhenDriverHandicap_ThenParkNearestFreeSpace() {
         try {
-            parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
+            parkingLotSystem = new ParkingLotSystem(attendantName, 4, PARKING_LOT_SIZE);
             while (carsInPark++ < 120)
                 parkingLotSystem.park(new Vehicle(attendantName, date, new Driver(parkingLotSystem
                         , Driver.IsHandicap.YES), size, color, plateNumber, brand));
@@ -246,7 +245,7 @@ public class ParkingLotTest {
     @Test
     public void givenParkingAttendant_WhenCarIsLarge_ThenParkInLotWithMaximumFreeSpace() {
         try {
-            parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
+            parkingLotSystem = new ParkingLotSystem(attendantName, 4, PARKING_LOT_SIZE);
             parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color, plateNumber, brand), "P1 1");
             parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color, plateNumber, brand), "P3 1");
             parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, color, plateNumber, brand), "P4 1");
@@ -263,7 +262,7 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLotSystem_WhenCarColorGiven_ThenReturnCar() {
         try {
-            parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
+            parkingLotSystem = new ParkingLotSystem(attendantName, 4, PARKING_LOT_SIZE);
             PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
             parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.WHITE, plateNumber, brand));
             Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(Vehicle.Color.WHITE);
@@ -276,7 +275,7 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLotSystem_WhenCarColorGivenTest2_ThenReturnCar() {
         try {
-            parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
+            parkingLotSystem = new ParkingLotSystem(attendantName, 4, PARKING_LOT_SIZE);
             PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
             parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, brand));
             Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(Vehicle.Color.WHITE);
@@ -289,7 +288,7 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLotSystem_WhenCarColorAndBrandGiven_ThenReturnCars() {
         try {
-            parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
+            parkingLotSystem = new ParkingLotSystem(attendantName, 4, PARKING_LOT_SIZE);
             PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
             parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.TOYOTA));
             parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.WHITE, plateNumber, Vehicle.Brand.TOYOTA));
@@ -304,7 +303,7 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLotSystem_WhenCarBrandGiven_ThenReturnCars() {
         try {
-            parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
+            parkingLotSystem = new ParkingLotSystem(attendantName, 4, PARKING_LOT_SIZE);
             PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
             parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.BMW));
             parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.TOYOTA));
@@ -318,11 +317,11 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLotSystem_ReturnCarsParkedInLast30Minutes() {
         try {
-            parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
+            parkingLotSystem = new ParkingLotSystem(attendantName, 4, PARKING_LOT_SIZE);
             PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
             parkingLotSystem.park(new Vehicle(attendantName, new Date(System.currentTimeMillis() - 1799 * 1000), driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.BMW));
             parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.TOYOTA));
-            Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(30 * 60);
+            Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(new Date(System.currentTimeMillis() - 30 * 60 * 1000));
             Assert.assertEquals(2, vehicles.size());
         } catch (ParkingLotException e) {
             e.printStackTrace();
@@ -332,12 +331,27 @@ public class ParkingLotTest {
     @Test
     public void givenParkingLotSystem_When1CarParkedInLast30Minutes_ThenReturn1Car() {
         try {
-            parkingLotSystem = new ParkingLotSystem(attendantName,4, PARKING_LOT_SIZE);
+            parkingLotSystem = new ParkingLotSystem(attendantName, 4, PARKING_LOT_SIZE);
             PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
             parkingLotSystem.park(new Vehicle(attendantName, new Date(System.currentTimeMillis() - 1800 * 1000), driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.BMW));
             parkingLotSystem.park(new Vehicle(attendantName, date, driver, size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.TOYOTA));
-            Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(30 * 60);
+            Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(new Date(System.currentTimeMillis() - 30 * 60 * 1000));
             Assert.assertEquals(1, vehicles.size());
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenParkingLotSystem_ReturnCarsParkedInRowsBorD() {
+        try {
+            parkingLotSystem = new ParkingLotSystem(attendantName, 4, PARKING_LOT_SIZE);
+            PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
+            parkingLotSystem.park(new Vehicle(attendantName, date, new Driver(parkingLotSystem, Driver.IsHandicap.YES), size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.BMW), "P1 40");
+            parkingLotSystem.park(new Vehicle(attendantName, date, new Driver(parkingLotSystem, Driver.IsHandicap.YES), size, Vehicle.Color.BLUE, plateNumber, Vehicle.Brand.TOYOTA),"P1 19");
+            Map<String, Vehicle> vehicles = policeDepartment.getAllVehicles(Vehicle.Size.SMALL, Driver.IsHandicap.YES, 'B');
+            vehicles.putAll(policeDepartment.getAllVehicles(Vehicle.Size.SMALL, Driver.IsHandicap.YES, 'D'));
+            Assert.assertEquals(2, vehicles.size());
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }

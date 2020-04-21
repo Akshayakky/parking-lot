@@ -27,14 +27,20 @@ public class PoliceDepartment {
     }
 
     Predicate<? super Map.Entry<String, Vehicle>> getPredicate(Object object) {
+        System.out.println(object.getClass().getName());
         switch (object.getClass().getName()) {
             case "com.bridgelabz.parkinglot.Vehicle$Color":
                 return e -> object.equals(e.getValue().color);
             case "com.bridgelabz.parkinglot.Vehicle$Brand":
                 return e -> object.equals(e.getValue().brand);
-            case "java.lang.Integer" :
-                return e -> (e.getValue().dateParking).after(new Date(System.currentTimeMillis() - Integer
-                        .parseInt(object.toString()) * 1000));
+            case "java.util.Date":
+                return e -> (e.getValue().dateParking).after((Date) object);
+            case "com.bridgelabz.parkinglot.Vehicle$Size":
+                return e -> object.equals(e.getValue().size);
+            case "com.bridgelabz.parkinglot.Driver$IsHandicap":
+                return e -> object.equals(e.getValue().driver.isHandicap);
+            case "java.lang.Character":
+                return e -> object.equals(parkingLotSystem.parkingAttendant.getParkingRow(e.getValue()));
             default:
                 return e -> object.equals(e.getValue());
         }

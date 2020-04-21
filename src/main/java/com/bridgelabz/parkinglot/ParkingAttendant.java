@@ -30,7 +30,14 @@ public class ParkingAttendant {
         lot = (vehicle.driver.isHandicap == Driver.IsHandicap.YES) ? getNearestFreeSpaceLot() : getLotWithMinimumCars();
         if (parkingLotSystem.isFull())
             throw new ParkingLotException(ParkingLotException.ExceptionType.LOTS_FULL, "All Lots Full");
-        return "P" + lot + " " + (noOfCars.get(lot) + 1);
+        return "P" + lot + " " + (getParkingSlot(lot));
+    }
+
+    private int getParkingSlot(int lot) {
+        int slot = 1;
+        while (parkingLotSystem.carsInLot.containsKey("P" + lot + " " + slot))
+            slot++;
+        return slot;
     }
 
     private int getNearestFreeSpaceLot() {
@@ -56,6 +63,13 @@ public class ParkingAttendant {
         parkingLotSystem.carsInLot.entrySet().removeIf(entry -> vehicle.equals(entry.getValue()));
         parkingLotSystem.updateObservers();
         updateLots();
+    }
+
+    public char getParkingRow(Vehicle vehicle) {
+        String position = parkingLotSystem.carsInLot.keySet().stream().filter(key -> parkingLotSystem.carsInLot.get(key).equals(vehicle)).findFirst().get();
+        return (Integer.parseInt(position.split(" ")[1]) % 10 == 0) ? (char) (Integer.parseInt(position
+                .split(" ")[1])/10 + 65 -1) : (char) (Integer.parseInt(position.split(" ")[1])/10 + 65);
+//        return (char) (Integer.parseInt(position.split(" ")[1])/10 + 65);
     }
 
     public boolean isParked(Vehicle vehicle) {
