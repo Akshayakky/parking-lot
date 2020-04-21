@@ -358,4 +358,18 @@ public class ParkingLotTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void givenParkingLotSystem_GetAllVehiclesForPoliceInvestigation() {
+        try {
+            parkingLotSystem = new ParkingLotSystem(attendantName, 4, PARKING_LOT_SIZE);
+            PoliceDepartment policeDepartment = new PoliceDepartment(parkingLotSystem);
+            parkingLotSystem.park(new ParkingSlot(new Vehicle(size, color, plateNumber, brand), driver, date, attendantName));
+            parkingLotSystem.park(new ParkingSlot(new Vehicle(size, color, plateNumber, brand), driver, date, attendantName));
+            Map<String, ParkingSlot> vehicles = policeDepartment.getAllVehicles();
+            Assert.assertEquals(2, vehicles.size());
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
 }
