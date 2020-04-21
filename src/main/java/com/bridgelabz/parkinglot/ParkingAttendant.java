@@ -18,6 +18,8 @@ public class ParkingAttendant {
     public void park(ParkingSlot parkingSlot, String... positionArray) throws ParkingLotException {
         String position;
         position = (positionArray.length == 0) ? getParkingPosition(parkingSlot) : positionArray[0];
+        if (Integer.parseInt(position.split(" ")[1]) > parkingLotSystem.PARKING_LOT_SIZE || Integer.parseInt(position.split(" ")[1]) < 1)
+            throw new ParkingLotException(ParkingLotException.ExceptionType.INVALID_SLOT, "Enter Proper Slot");
         if (parkingLotSystem.carsInLot.containsKey(position))
             throw new ParkingLotException(ParkingLotException.ExceptionType.ALREADY_OCCUPIED, "Position Already Occupied");
         parkingLotSystem.carsInLot.put(position, parkingSlot);

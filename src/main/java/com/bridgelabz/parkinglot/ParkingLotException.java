@@ -3,7 +3,7 @@ package com.bridgelabz.parkinglot;
 public class ParkingLotException extends Throwable {
 
     enum ExceptionType {
-        IS_ALREADY_PARKED, IS_ALREADY_UNPARKED, LOTS_FULL, ALREADY_OCCUPIED;
+        IS_ALREADY_PARKED, IS_ALREADY_UNPARKED, LOTS_FULL, ALREADY_OCCUPIED, INVALID_SLOT;
     }
 
     ExceptionType type;

@@ -173,6 +173,16 @@ public class ParkingLotTest {
     }
 
     @Test
+    public void givenParkingLot_WhenSlotInvalid_ThenThrowException() {
+        try {
+            boolean isParked = parkingLotSystem.park(new ParkingSlot(vehicle, driver, date, attendantName), "P1 -1");
+            Assert.assertTrue(isParked);
+        } catch (ParkingLotException e) {
+            Assert.assertEquals(ParkingLotException.ExceptionType.INVALID_SLOT, e.type);
+        }
+    }
+
+    @Test
     public void givenParkingLot_WhenLotNotFull_ThenDontRedirectSecurity() {
         try {
             while (carsInPark++ < PARKING_LOT_SIZE - 1)
