@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 public class PoliceDepartment {
     ParkingLotSystem parkingLotSystem;
-    Map<String, Vehicle> vehicles = new HashMap<>();
+    Map<String, ParkingSlot> vehicles = new HashMap<>();
 
     public PoliceDepartment(ParkingLotSystem parkingLotSystem) {
         this.parkingLotSystem = parkingLotSystem;
     }
 
-    public Map<String, Vehicle> getAllVehicles(Object... attributes) {
+    public Map<String, ParkingSlot> getAllVehicles(Object... attributes) {
         vehicles = parkingLotSystem.carsInLot;
         Arrays.stream(attributes).forEach(attribute -> getFilteredMap(attribute));
         return vehicles;
@@ -26,21 +26,20 @@ public class PoliceDepartment {
                 .collect(Collectors.toConcurrentMap(p -> p.getKey(), p -> p.getValue()));
     }
 
-    Predicate<? super Map.Entry<String, Vehicle>> getPredicate(Object object) {
-        System.out.println(object.getClass().getName());
+    Predicate<? super Map.Entry<String, ParkingSlot>> getPredicate(Object object) {
         switch (object.getClass().getName()) {
             case "com.bridgelabz.parkinglot.Vehicle$Color":
-                return e -> object.equals(e.getValue().color);
+                return e -> object.equals(e.getValue().vehicle.color);
             case "com.bridgelabz.parkinglot.Vehicle$Brand":
-                return e -> object.equals(e.getValue().brand);
+                return e -> object.equals(e.getValue().vehicle.brand);
             case "java.util.Date":
                 return e -> (e.getValue().dateParking).after((Date) object);
             case "com.bridgelabz.parkinglot.Vehicle$Size":
-                return e -> object.equals(e.getValue().size);
+                return e -> object.equals(e.getValue().vehicle.size);
             case "com.bridgelabz.parkinglot.Driver$IsHandicap":
                 return e -> object.equals(e.getValue().driver.isHandicap);
             case "java.lang.Character":
-                return e -> object.equals(parkingLotSystem.parkingAttendant.getParkingRow(e.getValue()));
+                return e -> object.equals(parkingLotSystem.parkingAttendant.getParkingRow(e.getValue().vehicle));
             default:
                 return e -> object.equals(e.getValue());
         }

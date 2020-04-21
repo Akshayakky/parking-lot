@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ParkingLotSystem {
     public final int NO_OF_LOTS;
-    public Map<String, Vehicle> carsInLot = new HashMap<>();
+    public Map<String, ParkingSlot> carsInLot = new HashMap<>();
     public ParkingAttendant parkingAttendant;
     public AirportSecurity airportSecurity;
     public ParkingLotOwner parkingLotOwner;
@@ -19,18 +19,18 @@ public class ParkingLotSystem {
         this.NO_OF_LOTS = NO_OF_LOTS;
     }
 
-    public boolean park(Vehicle vehicle, String... position) throws ParkingLotException {
+    public boolean park(ParkingSlot parkingSlot, String... position) throws ParkingLotException {
         parkingAttendant.updateLots();
-        if (parkingAttendant.isParked(vehicle))
+        if (parkingAttendant.isParked(parkingSlot.vehicle))
             throw new ParkingLotException(ParkingLotException.ExceptionType.IS_ALREADY_PARKED, "Is Already Parked");
-        parkingAttendant.park(vehicle, position);
+        parkingAttendant.park(parkingSlot, position);
         return true;
     }
 
-    public boolean unPark(Vehicle vehicle) throws ParkingLotException {
-        if (!parkingAttendant.isParked(vehicle))
+    public boolean unPark(ParkingSlot parkingSlot) throws ParkingLotException {
+        if (!parkingAttendant.isParked(parkingSlot.vehicle))
             throw new ParkingLotException(ParkingLotException.ExceptionType.IS_ALREADY_UNPARKED, "Is Already UnParked");
-        parkingAttendant.unPark(vehicle);
+        parkingAttendant.unPark(parkingSlot);
         return true;
     }
 
@@ -43,7 +43,7 @@ public class ParkingLotSystem {
     }
 
     public String getCarPosition(Vehicle vehicle) {
-        return carsInLot.keySet().stream().filter(key -> vehicle.equals(carsInLot.get(key))).findFirst().get();
+        return carsInLot.keySet().stream().filter(key -> vehicle.equals(carsInLot.get(key).vehicle)).findFirst().get();
     }
 
     public int getNumberOfCars(int lotNumber) {

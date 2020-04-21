@@ -15,19 +15,19 @@ public class ParkingAttendant {
         this.attendantName = attendantName;
     }
 
-    public void park(Vehicle vehicle, String... positionArray) throws ParkingLotException {
+    public void park(ParkingSlot parkingSlot, String... positionArray) throws ParkingLotException {
         String position;
-        position = (positionArray.length == 0) ? getParkingPosition(vehicle) : positionArray[0];
+        position = (positionArray.length == 0) ? getParkingPosition(parkingSlot) : positionArray[0];
         if (parkingLotSystem.carsInLot.containsKey(position))
             throw new ParkingLotException(ParkingLotException.ExceptionType.ALREADY_OCCUPIED, "Position Already Occupied");
-        parkingLotSystem.carsInLot.put(position, vehicle);
+        parkingLotSystem.carsInLot.put(position, parkingSlot);
         parkingLotSystem.updateObservers();
         updateLots();
     }
 
-    public String getParkingPosition(Vehicle vehicle) throws ParkingLotException {
+    public String getParkingPosition(ParkingSlot parkingSlot) throws ParkingLotException {
         int lot;
-        lot = (vehicle.driver.isHandicap == Driver.IsHandicap.YES) ? getNearestFreeSpaceLot() : getLotWithMinimumCars();
+        lot = (parkingSlot.driver.isHandicap == Driver.IsHandicap.YES) ? getNearestFreeSpaceLot() : getLotWithMinimumCars();
         if (parkingLotSystem.isFull())
             throw new ParkingLotException(ParkingLotException.ExceptionType.LOTS_FULL, "All Lots Full");
         return "P" + lot + " " + (getParkingSlot(lot));
@@ -59,20 +59,19 @@ public class ParkingAttendant {
                 .findFirst().get();
     }
 
-    public void unPark(Vehicle vehicle) {
-        parkingLotSystem.carsInLot.entrySet().removeIf(entry -> vehicle.equals(entry.getValue()));
+    public void unPark(ParkingSlot parkingSlot) {
+        parkingLotSystem.carsInLot.entrySet().removeIf(entry -> parkingSlot.equals(entry.getValue()));
         parkingLotSystem.updateObservers();
         updateLots();
     }
 
     public char getParkingRow(Vehicle vehicle) {
-        String position = parkingLotSystem.carsInLot.keySet().stream().filter(key -> parkingLotSystem.carsInLot.get(key).equals(vehicle)).findFirst().get();
-        return (Integer.parseInt(position.split(" ")[1]) % 10 == 0) ? (char) (Integer.parseInt(position
-                .split(" ")[1])/10 + 65 -1) : (char) (Integer.parseInt(position.split(" ")[1])/10 + 65);
-//        return (char) (Integer.parseInt(position.split(" ")[1])/10 + 65);
+        String position = parkingLotSystem.carsInLot.keySet().stream().filter(key -> parkingLotSystem.carsInLot.get(key).vehicle.equals(vehicle)).findFirst().get();
+        int slotNumber = Integer.parseInt(position.split(" ")[1]);
+        return (slotNumber % 10 == 0) ? (char) (slotNumber/10 + 65 -1) : (char) (slotNumber/10 + 65);
     }
 
     public boolean isParked(Vehicle vehicle) {
-        return (parkingLotSystem.carsInLot.containsValue(vehicle)) ? true : false;
+        return parkingLotSystem.carsInLot.values().stream().anyMatch(value -> value.vehicle.equals(vehicle));
     }
 }
