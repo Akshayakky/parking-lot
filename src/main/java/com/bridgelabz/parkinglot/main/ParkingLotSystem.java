@@ -1,4 +1,11 @@
-package com.bridgelabz.parkinglot;
+package com.bridgelabz.parkinglot.main;
+
+import com.bridgelabz.parkinglot.exception.ParkingLotException;
+import com.bridgelabz.parkinglot.observer.AirportSecurity;
+import com.bridgelabz.parkinglot.observer.IParkingLotObserver;
+import com.bridgelabz.parkinglot.observer.ParkingLotOwner;
+import com.bridgelabz.parkinglot.spot.ParkingSpot;
+import com.bridgelabz.parkinglot.spot.Vehicle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +13,7 @@ import java.util.Map;
 
 public class ParkingLotSystem {
     public final int NO_OF_LOTS;
-    public Map<String, ParkingSlot> carsInLot = new HashMap<>();
+    public Map<String, ParkingSpot> carsInLot = new HashMap<>();
     public ParkingAttendant parkingAttendant;
     public AirportSecurity airportSecurity;
     public ParkingLotOwner parkingLotOwner;
@@ -21,18 +28,18 @@ public class ParkingLotSystem {
         this.NO_OF_LOTS = NO_OF_LOTS;
     }
 
-    public boolean park(ParkingSlot parkingSlot, String... position) throws ParkingLotException {
+    public boolean park(ParkingSpot parkingSpot, String... position) throws ParkingLotException {
         parkingAttendant.updateLots();
-        if (parkingAttendant.isParked(parkingSlot.vehicle))
+        if (parkingAttendant.isParked(parkingSpot.vehicle))
             throw new ParkingLotException(ParkingLotException.ExceptionType.IS_ALREADY_PARKED, "Is Already Parked");
-        parkingAttendant.park(parkingSlot, position);
+        parkingAttendant.park(parkingSpot, position);
         return true;
     }
 
-    public boolean unPark(ParkingSlot parkingSlot) throws ParkingLotException {
-        if (!parkingAttendant.isParked(parkingSlot.vehicle))
+    public boolean unPark(ParkingSpot parkingSpot) throws ParkingLotException {
+        if (!parkingAttendant.isParked(parkingSpot.vehicle))
             throw new ParkingLotException(ParkingLotException.ExceptionType.IS_ALREADY_UNPARKED, "Is Already UnParked");
-        parkingAttendant.unPark(parkingSlot);
+        parkingAttendant.unPark(parkingSpot);
         return true;
     }
 
@@ -60,9 +67,5 @@ public class ParkingLotSystem {
 
     public void register(IParkingLotObserver parkingLotObserver) {
         observers.add(parkingLotObserver);
-    }
-
-    public void remove(IParkingLotObserver parkingLotObserver) {
-        observers.remove(parkingLotObserver);
     }
 }

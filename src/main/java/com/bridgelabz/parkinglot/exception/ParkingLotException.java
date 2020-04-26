@@ -1,4 +1,4 @@
-package com.bridgelabz.parkinglot;
+package com.bridgelabz.parkinglot.exception;
 
 public class ParkingLotException extends Throwable {
 
@@ -10,6 +10,6 @@ public class ParkingLotException extends Throwable {
     }
 
     public enum ExceptionType {
-        IS_ALREADY_PARKED, IS_ALREADY_UNPARKED, LOTS_FULL, ALREADY_OCCUPIED, INVALID_SLOT;
+        IS_ALREADY_PARKED, IS_ALREADY_UNPARKED, LOTS_FULL, ALREADY_OCCUPIED, INVALID_SPOT;
     }
 }

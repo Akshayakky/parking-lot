@@ -1,4 +1,4 @@
-package com.bridgelabz.parkinglot;
+package com.bridgelabz.parkinglot.spot;
 
 public class Vehicle {
     public Size size;

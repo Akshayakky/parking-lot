@@ -1,4 +1,6 @@
-package com.bridgelabz.parkinglot;
+package com.bridgelabz.parkinglot.spot;
+
+import com.bridgelabz.parkinglot.main.ParkingLotSystem;
 
 public class Driver {
 

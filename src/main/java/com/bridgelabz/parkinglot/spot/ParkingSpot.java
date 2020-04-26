@@ -1,14 +1,14 @@
-package com.bridgelabz.parkinglot;
+package com.bridgelabz.parkinglot.spot;
 
 import java.util.Date;
 
-public class ParkingSlot {
+public class ParkingSpot {
     public Vehicle vehicle;
     public Driver driver;
     public Date dateParking;
     String attendantName;
 
-    public ParkingSlot(Vehicle vehicle, Driver driver, String attendantName) {
+    public ParkingSpot(Vehicle vehicle, Driver driver, String attendantName) {
         this.vehicle = vehicle;
         this.driver = driver;
         this.dateParking = new Date();

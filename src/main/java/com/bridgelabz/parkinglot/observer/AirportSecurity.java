@@ -1,11 +1,13 @@
-package com.bridgelabz.parkinglot;
+package com.bridgelabz.parkinglot.observer;
 
-public class ParkingLotOwner implements IParkingLotObserver {
+import com.bridgelabz.parkinglot.main.ParkingLotSystem;
+
+public class AirportSecurity implements IParkingLotObserver {
 
     public boolean isFull;
     private ParkingLotSystem parkingLotSystem;
 
-    public ParkingLotOwner(ParkingLotSystem parkingLotSystem) {
+    public AirportSecurity(ParkingLotSystem parkingLotSystem) {
         this.parkingLotSystem = parkingLotSystem;
     }
 

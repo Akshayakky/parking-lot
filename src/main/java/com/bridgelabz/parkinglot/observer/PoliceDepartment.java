@@ -1,4 +1,7 @@
-package com.bridgelabz.parkinglot;
+package com.bridgelabz.parkinglot.observer;
+
+import com.bridgelabz.parkinglot.main.ParkingLotSystem;
+import com.bridgelabz.parkinglot.spot.ParkingSpot;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -9,13 +12,13 @@ import java.util.stream.Collectors;
 
 public class PoliceDepartment {
     ParkingLotSystem parkingLotSystem;
-    Map<String, ParkingSlot> vehicles = new HashMap<>();
+    Map<String, ParkingSpot> vehicles = new HashMap<>();
 
     public PoliceDepartment(ParkingLotSystem parkingLotSystem) {
         this.parkingLotSystem = parkingLotSystem;
     }
 
-    public Map<String, ParkingSlot> getAllVehicles(Object... attributes) {
+    public Map<String, ParkingSpot> getAllVehicles(Object... attributes) {
         vehicles = parkingLotSystem.carsInLot;
         Arrays.stream(attributes).forEach(attribute -> getFilteredMap(attribute));
         return vehicles;
@@ -26,17 +29,17 @@ public class PoliceDepartment {
                 .collect(Collectors.toConcurrentMap(p -> p.getKey(), p -> p.getValue()));
     }
 
-    Predicate<? super Map.Entry<String, ParkingSlot>> getPredicate(Object object) {
+    Predicate<? super Map.Entry<String, ParkingSpot>> getPredicate(Object object) {
         switch (object.getClass().getName()) {
-            case "com.bridgelabz.parkinglot.Vehicle$Color":
+            case "com.bridgelabz.parkinglot.spot.Vehicle$Color":
                 return e -> object.equals(e.getValue().vehicle.color);
-            case "com.bridgelabz.parkinglot.Vehicle$Brand":
+            case "com.bridgelabz.parkinglot.spot.Vehicle$Brand":
                 return e -> object.equals(e.getValue().vehicle.brand);
             case "java.util.Date":
                 return e -> (e.getValue().dateParking).after((Date) object);
-            case "com.bridgelabz.parkinglot.Vehicle$Size":
+            case "com.bridgelabz.parkinglot.spot.Vehicle$Size":
                 return e -> object.equals(e.getValue().vehicle.size);
-            case "com.bridgelabz.parkinglot.Driver$IsHandicap":
+            case "com.bridgelabz.parkinglot.spot.Driver$IsHandicap":
                 return e -> object.equals(e.getValue().driver.isHandicap);
             case "java.lang.Character":
                 return e -> object.equals(parkingLotSystem.parkingAttendant.getParkingRow(e.getValue().vehicle));
