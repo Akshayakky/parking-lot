@@ -8,10 +8,10 @@ public class ParkingSlot {
     public Date dateParking;
     String attendantName;
 
-    public ParkingSlot(Vehicle vehicle, Driver driver, Date date, String attendantName) {
+    public ParkingSlot(Vehicle vehicle, Driver driver, String attendantName) {
         this.vehicle = vehicle;
         this.driver = driver;
-        this.dateParking = date;
+        this.dateParking = new Date();
         this.attendantName = attendantName;
     }
 }

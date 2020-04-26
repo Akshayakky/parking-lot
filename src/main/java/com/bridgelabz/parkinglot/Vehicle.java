@@ -2,11 +2,11 @@ package com.bridgelabz.parkinglot;
 
 public class Vehicle {
     public Size size;
-    Color color;
-    String plateNumber;
-    Brand brand;
+    public Color color;
+    public String plateNumber;
+    public Brand brand;
 
-    public Vehicle(Size size, Color color,String plateNumber, Brand brand) {
+    public Vehicle(Size size, Color color, String plateNumber, Brand brand) {
         this.size = size;
         this.color = color;
         this.plateNumber = plateNumber;
@@ -16,15 +16,15 @@ public class Vehicle {
     public Vehicle() {
     }
 
-    enum Brand {
+    public enum Brand {
         TOYOTA, BMW;
     }
 
-    enum Color {
+    public enum Color {
         WHITE, BLACK, RED, BLUE, YELLOW;
     }
 
-    enum Size {
+    public enum Size {
         SMALL, LARGE;
     }
 }

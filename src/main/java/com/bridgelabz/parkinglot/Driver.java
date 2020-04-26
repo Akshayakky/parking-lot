@@ -2,8 +2,8 @@ package com.bridgelabz.parkinglot;
 
 public class Driver {
 
-    private ParkingLotSystem parkingLotSystem;
     public IsHandicap isHandicap;
+    private ParkingLotSystem parkingLotSystem;
 
     public Driver(ParkingLotSystem parkingLotSystem) {
         this.parkingLotSystem = parkingLotSystem;
@@ -14,11 +14,11 @@ public class Driver {
         this.isHandicap = isHandicap;
     }
 
-    enum IsHandicap {
-        NO, YES;
-    }
-
     public String getCarPosition(Vehicle vehicle) {
         return parkingLotSystem.getCarPosition(vehicle);
+    }
+
+    public enum IsHandicap {
+        NO, YES;
     }
 }

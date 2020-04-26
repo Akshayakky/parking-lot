@@ -1,5 +1,6 @@
 package com.bridgelabz.parkinglot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ public class ParkingLotSystem {
     public AirportSecurity airportSecurity;
     public ParkingLotOwner parkingLotOwner;
     public int PARKING_LOT_SIZE;
+    ArrayList<IParkingLotObserver> observers = new ArrayList();
 
     public ParkingLotSystem(String attendantName, int NO_OF_LOTS, int PARKING_LOT_SIZE) {
         this.parkingAttendant = new ParkingAttendant(this, attendantName);
@@ -51,7 +53,16 @@ public class ParkingLotSystem {
     }
 
     public void updateObservers() {
-        parkingLotOwner.isFull();
-        airportSecurity.isFull();
+        for (IParkingLotObserver parkingLotObserver : observers) {
+            parkingLotObserver.isFull();
+        }
+    }
+
+    public void register(IParkingLotObserver parkingLotObserver) {
+        observers.add(parkingLotObserver);
+    }
+
+    public void remove(IParkingLotObserver parkingLotObserver) {
+        observers.remove(parkingLotObserver);
     }
 }

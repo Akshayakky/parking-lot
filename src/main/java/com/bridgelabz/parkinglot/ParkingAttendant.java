@@ -7,8 +7,8 @@ import java.util.Map;
 public class ParkingAttendant {
 
     ParkingLotSystem parkingLotSystem;
-    private Map<Integer, Integer> noOfCars = new HashMap<>();
     String attendantName;
+    private Map<Integer, Integer> noOfCars = new HashMap<>();
 
     public ParkingAttendant(ParkingLotSystem parkingLotSystem, String attendantName) {
         this.parkingLotSystem = parkingLotSystem;
@@ -70,7 +70,7 @@ public class ParkingAttendant {
     public char getParkingRow(Vehicle vehicle) {
         String position = parkingLotSystem.carsInLot.keySet().stream().filter(key -> parkingLotSystem.carsInLot.get(key).vehicle.equals(vehicle)).findFirst().get();
         int slotNumber = Integer.parseInt(position.split(" ")[1]);
-        return (slotNumber % 10 == 0) ? (char) (slotNumber/10 + 65 -1) : (char) (slotNumber/10 + 65);
+        return (slotNumber % 10 == 0) ? (char) (slotNumber / 10 + 65 - 1) : (char) (slotNumber / 10 + 65);
     }
 
     public boolean isParked(Vehicle vehicle) {
